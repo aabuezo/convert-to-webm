@@ -27,7 +27,9 @@ func Init() {
 func getHelp() {
 	fmt.Println("Usage:")
 	fmt.Println()
+	fmt.Println("convert-to-webm <path/to/><filename>[.mov | .mp4]")
 	fmt.Println("convert-to-webm <filename>[.mov | .mp4]")
+	fmt.Println("convert-to-webm <path/to/>*")
 	fmt.Println("convert-to-webm *")
 	fmt.Println()
 	fmt.Println("-h | --help : prints this help")
