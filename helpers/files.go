@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func SplitPath(path string) (dir string, suffix string, ext string) {
+func splitPath(path string) (dir string, suffix string, ext string) {
 	// check if file exists
 	if _, err := os.Stat(path); err != nil {
 		log.Fatalf("Error: file %v does not exist.", path)
@@ -17,10 +17,10 @@ func SplitPath(path string) (dir string, suffix string, ext string) {
 	dir, filename := filepath.Split(path)
 	ext = filepath.Ext(filename)
 	suffix = strings.TrimSuffix(filename, ext)
-	log.Println("dir:", dir)
-	log.Println("filename:", filename)
-	log.Println("suffix:", suffix)
-	log.Println("ext:", ext)
+	// log.Println("dir:", dir)
+	// log.Println("filename:", filename)
+	// log.Println("suffix:", suffix)
+	// log.Println("ext:", ext)
 
 	return
 }

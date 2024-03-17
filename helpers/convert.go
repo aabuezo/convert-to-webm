@@ -4,23 +4,19 @@ import (
 	"log"
 )
 
-func ConvertAll() {
-	log.Println("Processing all files in current directory...")
-}
-
-func Convert(from string) {
-	dir, filename, srcExt := SplitPath(from)
+func convert(from string) {
+	dir, filename, ext := splitPath(from)
 	to := dir + filename + ".webm"
 
-	if srcExt != ".mov" && srcExt != ".mp4" {
-		log.Printf("Error: invalid file extension (%v)\n", srcExt)
+	if ext != ".mov" && ext != ".mp4" {
+		log.Printf("Error: invalid file extension (%v)\n", ext)
 		return
 	}
 
-	if srcExt == ".mov" {
+	if ext == ".mov" {
 		convertMovToWebm(from, to)
 	}
-	if srcExt == ".mp4" {
+	if ext == ".mp4" {
 		convertMp4ToWebm(from, to)
 	}
 }
