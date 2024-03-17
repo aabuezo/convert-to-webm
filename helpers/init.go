@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 )
 
 func Init() {
@@ -14,10 +15,13 @@ func Init() {
 		os.Exit(1)
 	}
 
-	for _, f := range args[1:] {
-		log.Println(f)
-		convert(f)
+	if !isFfmpegPresent() {
+		log.Println("Error: ffmpeg is not present. Please install ffmpeg first.")
+		log.Println("Run 'brew install ffmpeg' on MacOS.")
+		os.Exit(1)
 	}
+
+	convertAll(args)
 }
 
 func getHelp() {
@@ -30,4 +34,12 @@ func getHelp() {
 	fmt.Println("-h | --help : prints this help")
 	fmt.Println("*           : converts all [.mov | .mp4] files to .webm")
 	fmt.Println()
+}
+
+func isFfmpegPresent() bool {
+	if _, err := exec.LookPath("ffmpeg"); err != nil {
+		return false
+	} else {
+		return true
+	}
 }

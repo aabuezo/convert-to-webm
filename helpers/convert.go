@@ -1,14 +1,44 @@
 package helpers
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
 )
 
-func convert(from string) {
-	dir, filename, ext := splitPath(from)
-	to := dir + filename + ".webm"
+func convertAll(args []string) {
+
+	dir, _, _ := splitPath(args[1])
+	err := os.Chdir(dir)
+	if err != nil {
+		panic(err)
+	}
+
+	pwd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Current working directory:", pwd)
+
+	var files []string
+	for _, f := range args[1:] {
+		_, filename, ext := splitPath(f)
+		src := filename + ext
+		log.Println(src)
+		if ext == ".mov" || ext == ".mp4" {
+			files = append(files, src)
+		}
+	}
+
+	for _, f := range files {
+		convert(f)
+	}
+}
+
+func convert(src string) {
+	_, filename, ext := splitPath(src)
+	dest := filename + ".webm"
 
 	if ext != ".mov" && ext != ".mp4" {
 		log.Printf("Error: invalid file extension (%v)\n", ext)
@@ -16,35 +46,35 @@ func convert(from string) {
 	}
 
 	if ext == ".mov" {
-		convertMovToWebm(from, to)
+		convertMovToWebm(src, dest)
 	}
 	if ext == ".mp4" {
-		convertMp4ToWebm(from, to)
+		convertMp4ToWebm(src, dest)
 	}
 }
 
-func convertMovToWebm(from string, to string) {
-	log.Printf("Converting %v to %v\n", from, to)
-	cmd := exec.Command("ffmpeg -i " + from + " libvpx-vp9 -crf 30 -b:v 0 -b:a 128k -c:a libopus " + to)
+func convertMovToWebm(src string, dest string) {
+	log.Printf("Converting %v to %v\n", src, dest)
+	cmd := exec.Command("ffmpeg", "-i", src, "-c:v", "libvpx-vp9", "-crf", "30", "-b:v", "0", "-b:a", "128k", "-c:a", "libopus", dest)
 
 	if err := cmd.Run(); err != nil {
-		log.Fatal(err)
+		log.Fatal("ffmpeg error:", err)
 	}
 
-	if _, err := os.Stat(to); err == nil {
-		log.Println(to, "... Done.")
+	if _, err := os.Stat(dest); err == nil {
+		log.Println(dest, "... Done.")
 	}
 }
 
-func convertMp4ToWebm(from string, to string) {
-	log.Printf("Converting %v to %v\n", from, to)
-	cmd := exec.Command("ffmpeg -i " + from + " -vcodec copy " + to)
+func convertMp4ToWebm(src string, dest string) {
+	log.Printf("Converting %v to %v\n", src, dest)
+	cmd := exec.Command("ffmpeg", "-i", src, "-c:v", "libvpx-vp9", "-crf", "10", "-b:v", "0", "-b:a", "128k", "-c:a", "libopus", dest)
 
 	if err := cmd.Run(); err != nil {
-		log.Fatal(err)
+		log.Fatal("ffmpeg error:", err)
 	}
 
-	if _, err := os.Stat(to); err == nil {
-		log.Println(to, "... Done.")
+	if _, err := os.Stat(dest); err == nil {
+		log.Println(dest, "... Done.")
 	}
 }
