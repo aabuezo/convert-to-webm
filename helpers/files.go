@@ -17,10 +17,6 @@ func splitPath(path string) (dir string, suffix string, ext string) {
 	dir, filename := filepath.Split(path)
 	ext = filepath.Ext(filename)
 	suffix = strings.TrimSuffix(filename, ext)
-	// log.Println("dir:", dir)
-	// log.Println("filename:", filename)
-	// log.Println("suffix:", suffix)
-	// log.Println("ext:", ext)
 
 	return
 }
