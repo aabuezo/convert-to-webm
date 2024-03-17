@@ -14,10 +14,12 @@ Usage:
 convert-to-webm <filename>[.mov | .mp4]
 ```
 ```
-convert-to-webm <-h | --help>
+convert-to-webm [-h | --help]
+```
 ```
 convert-to-webm <filename>[.mov | .mp4]
 convert-to-webm *
 
 -h | --help : prints this help
 *           : converts all [.mov | .mp4] files to .webm
+```
