@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"sync"
 )
 
 func convertAll(args []string) {
@@ -20,40 +21,26 @@ func convertAll(args []string) {
 		panic(err)
 	}
 	fmt.Println("Current working directory:", pwd)
+	wg := sync.WaitGroup{}
 
-	var files []string
 	for _, f := range args[1:] {
 		_, filename, ext := splitPath(f)
 		src := filename + ext
-		log.Println(src)
-		if ext == ".mov" || ext == ".mp4" {
-			files = append(files, src)
+		dest := filename + ".webm"
+
+		if ext == ".mov" {
+			wg.Add(1)
+			go convertMovToWebm(src, dest, &wg)
+		}
+		if ext == ".mp4" {
+			wg.Add(1)
+			go convertMp4ToWebm(src, dest, &wg)
 		}
 	}
-
-	for _, f := range files {
-		convert(f)
-	}
+	wg.Wait()
 }
 
-func convert(src string) {
-	_, filename, ext := splitPath(src)
-	dest := filename + ".webm"
-
-	if ext != ".mov" && ext != ".mp4" {
-		log.Printf("Error: invalid file extension (%v)\n", ext)
-		return
-	}
-
-	if ext == ".mov" {
-		convertMovToWebm(src, dest)
-	}
-	if ext == ".mp4" {
-		convertMp4ToWebm(src, dest)
-	}
-}
-
-func convertMovToWebm(src string, dest string) {
+func convertMovToWebm(src string, dest string, wg *sync.WaitGroup) {
 	log.Printf("Converting %v to %v\n", src, dest)
 	cmd := exec.Command("ffmpeg", "-i", src, "-c:v", "libvpx-vp9", "-crf", "30", "-b:v", "0", "-b:a", "128k", "-c:a", "libopus", dest)
 
@@ -64,9 +51,10 @@ func convertMovToWebm(src string, dest string) {
 	if _, err := os.Stat(dest); err == nil {
 		log.Println(dest, "... Done.")
 	}
+	wg.Done()
 }
 
-func convertMp4ToWebm(src string, dest string) {
+func convertMp4ToWebm(src string, dest string, wg *sync.WaitGroup) {
 	log.Printf("Converting %v to %v\n", src, dest)
 	cmd := exec.Command("ffmpeg", "-i", src, "-c:v", "libvpx-vp9", "-crf", "10", "-b:v", "0", "-b:a", "128k", "-c:a", "libopus", dest)
 
@@ -77,4 +65,5 @@ func convertMp4ToWebm(src string, dest string) {
 	if _, err := os.Stat(dest); err == nil {
 		log.Println(dest, "... Done.")
 	}
+	wg.Done()
 }
