@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"time"
 )
 
 func Init() {
@@ -21,7 +22,10 @@ func Init() {
 		os.Exit(1)
 	}
 
+	start := time.Now()
 	convertAll(args)
+	elapsed := time.Since(start)
+	log.Printf("Took: %s\n", elapsed)
 }
 
 func getHelp() {
