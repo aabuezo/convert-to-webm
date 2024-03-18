@@ -9,11 +9,19 @@ import (
 
 func convertAll(args []string) {
 
-	// set working directory
-	dir, _, _ := splitPath(args[1])
-	err := os.Chdir(dir)
-	if err != nil {
-		panic(err)
+	// check if file exists
+	if _, err := os.Stat(args[1]); err != nil {
+		log.Printf("File %v does not exist.", args[1])
+		os.Exit(1)
+	} else {
+		// set working directory
+		dir, _, _ := splitPath(args[1])
+		if dir != "" {
+			err := os.Chdir(dir)
+			if err != nil {
+				panic(err)
+			}
+		}
 	}
 
 	// create waitgroups to run concurrently
@@ -24,11 +32,6 @@ func convertAll(args []string) {
 		_, filename, ext := splitPath(f)
 		src := filename + ext
 		dest := filename + ".webm"
-
-		if _, err := os.Stat(src); err != nil {
-			log.Printf("File %v does not exist.", src)
-			os.Exit(1)
-		}
 
 		// convert .mp4 or .mov only
 		if ext == ".mp4" || ext == ".mov" {
