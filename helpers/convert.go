@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 	"sync"
 )
 
@@ -28,6 +29,7 @@ func convertAll(args []string) {
 		dest := filename + ".webm"
 
 		// convert .mp4 or .mov only
+		ext = strings.ToLower(ext)
 		if ext == ".mp4" || ext == ".mov" {
 			// create new thread
 			wg.Add(1)
