@@ -9,18 +9,12 @@ import (
 
 func convertAll(args []string) {
 
-	// check if file exists
-	if _, err := os.Stat(args[1]); err != nil {
-		log.Printf("File %v does not exist.", args[1])
-		os.Exit(1)
-	} else {
-		// set working directory
-		dir, _, _ := splitPath(args[1])
-		if dir != "" {
-			err := os.Chdir(dir)
-			if err != nil {
-				panic(err)
-			}
+	// set working directory
+	dir, _, _ := splitPath(args[1])
+	if dir != "" {
+		err := os.Chdir(dir)
+		if err != nil {
+			panic(err)
 		}
 	}
 
