@@ -16,6 +16,7 @@ func Init() {
 		os.Exit(1)
 	}
 
+	// check if ffmpeg is already installed
 	if !isFfmpegPresent() {
 		log.Println("Error: ffmpeg is not present. Please install ffmpeg first.")
 		log.Println("Run 'brew install ffmpeg' on MacOS.")
@@ -23,8 +24,10 @@ func Init() {
 	}
 
 	start := time.Now()
+	// calling main convertion routine
 	convertAll(args)
 	elapsed := time.Since(start)
+	// print elapsed time to process all files
 	log.Printf("Took: %s\n", elapsed)
 }
 

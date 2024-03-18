@@ -9,14 +9,17 @@ import (
 
 func convertAll(args []string) {
 
+	// set working directory
 	dir, _, _ := splitPath(args[1])
 	err := os.Chdir(dir)
 	if err != nil {
 		panic(err)
 	}
 
+	// create waitgroups to run concurrently
 	wg := sync.WaitGroup{}
 
+	// iterate over the list of files in CWD
 	for _, f := range args[1:] {
 		_, filename, ext := splitPath(f)
 		src := filename + ext
@@ -24,9 +27,12 @@ func convertAll(args []string) {
 
 		if _, err := os.Stat(src); err != nil {
 			log.Printf("File %v does not exist.", src)
+			os.Exit(1)
 		}
 
+		// convert .mp4 or .mov only
 		if ext == ".mp4" || ext == ".mov" {
+			// create new thread
 			wg.Add(1)
 			go convert(src, ext, dest, &wg)
 		}
@@ -38,6 +44,7 @@ func convertAll(args []string) {
 func convert(src string, ext string, dest string, wg *sync.WaitGroup) {
 	log.Printf("Converting %v to %v\n", src, dest)
 
+	// call ffmpeg based on src file extension
 	var cmd *exec.Cmd
 	switch ext {
 	case ".mp4":
@@ -50,9 +57,11 @@ func convert(src string, ext string, dest string, wg *sync.WaitGroup) {
 		log.Fatal("Error processing ffmpeg:", err)
 	}
 
+	// new file .webm got created successfully
 	if _, err := os.Stat(dest); err == nil {
 		log.Println(dest, "Done.")
 	}
 
+	// close thread
 	wg.Done()
 }
