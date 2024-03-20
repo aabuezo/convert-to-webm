@@ -44,7 +44,7 @@ mv convert-to-webm $HOME/bin
 * Add $HOME/bin to your PATH in .zshrc or .bashrc
 ```
 cd $HOME
-echo 'export "PATH=$HOME/bin:$PATH"' >> .zshrc
+echo 'export PATH="$HOME/bin:$PATH"' >> .zshrc
 ```
 
 Change to your Videos directory and run
