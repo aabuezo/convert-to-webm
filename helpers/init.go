@@ -45,16 +45,14 @@ func Init() {
 }
 
 func getHelp() {
-	fmt.Println()
-	fmt.Println("Usage:")
-	fmt.Println()
-	fmt.Println("        convert-to-webm [-h | --help]")
-	fmt.Println("        convert-to-webm [-c] <filename1>[.mov|.mp4] <filename2>[.mov|.mp4] ...")
-	fmt.Println("        convert-to-webm [-c] <path/to/>*")
-	fmt.Println()
-	fmt.Println("  -h | --help : prints this help")
-	fmt.Println("  -c          : convert files concurrently (faster, but VERY resource intensive!!)")
-	fmt.Println("   *          : converts all [.mov|.mp4] files to .webm")
-	fmt.Println()
+	fmt.Println(`
+Usage:
+		convert-to-webm [-h | --help]
+		convert-to-webm [-c] <filename1>[.mov|.mp4] <filename2>[.mov|.mp4] ...
+		convert-to-webm [-c] <path/to/>*
+
+  -h | --help : prints this help
+  -c          : convert files concurrently (faster, but VERY resource intensive!!)
+   *          : converts all [.mov|.mp4] files to .webm`)
 	fmt.Println()
 }
