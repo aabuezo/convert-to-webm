@@ -12,11 +12,6 @@ import (
 func Run() {
 	args := os.Args
 
-	if len(args) < 2 || args[1] == "-h" || args[1] == "--help" {
-		getHelp()
-		os.Exit(1)
-	}
-
 	// check if ffmpeg is already installed
 	if _, err := exec.LookPath("ffmpeg"); err != nil {
 		fmt.Println("Error: ffmpeg is not present.")
@@ -25,9 +20,15 @@ func Run() {
 	}
 
 	// enable concurrency only if requested - default: false
-	if args[1] == "-c" {
+	if slices.Contains(args, "-c") {
 		concurrent = true
-		args = slices.Delete(args, 1, 2)
+		idx := slices.Index(args, "-c")
+		args = slices.Delete(args, idx, idx+1)
+	}
+
+	if len(args) < 2 || slices.Contains(args, "-h") || slices.Contains(args, "--help") {
+		getHelp()
+		os.Exit(1)
 	}
 
 	// meassure execution time
