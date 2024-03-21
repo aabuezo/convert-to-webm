@@ -1,11 +1,10 @@
 // convert-to-webm
-// for personal use
 // converts .mp4 and .mov to .webm
 
 package main
 
-import "github.com/aabuezo/convert-to-webm/helpers"
+import "github.com/aabuezo/convert-to-webm/converter"
 
 func main() {
-	helpers.Init()
+	converter.Run()
 }

@@ -1,4 +1,4 @@
-package helpers
+package converter
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func Init() {
+func Run() {
 	args := os.Args
 
 	if len(args) < 2 || args[1] == "-h" || args[1] == "--help" {
