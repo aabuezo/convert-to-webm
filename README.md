@@ -42,8 +42,10 @@ mkdir bin
 mv convert-to-webm $HOME/bin
 ```
 * Add $HOME/bin to your PATH in .zshrc or .bashrc
+  * NOTE: make a backup of your .zshrc or .bashrc file BEFORE running the next command
 ```
 cd $HOME
+cp .zshrc .zshrc.orig # making a backup .zshrc file
 echo 'export PATH="$HOME/bin:$PATH"' >> .zshrc
 ```
 
