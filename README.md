@@ -31,12 +31,14 @@ convert-to-webm [-c] <path/to/>*
 ```
 go build .
 ```
+this will create a convert-to-webm binary (excecutable) file
 * Create bin/ directory at $HOME:
 ```
 cd $HOME
 mkdir bin
 ```
 * cd to repo directory
+* within your convert-to-webm folder you'll find convert-to-webm binary
 * copy or move convert-to-webm to $HOME/bin/
 ```
 mv convert-to-webm $HOME/bin
